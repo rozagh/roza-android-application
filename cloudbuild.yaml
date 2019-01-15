@@ -1,10 +1,10 @@
 steps:
 #Copy
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '-r', '${_ANDROID_SIGNING_BUCKET_PATH}/','.']
+  args: ['cp', '${_ANDROID_SIGNING_BUCKET_PATH}/','.']
   id: copy_signing_files
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '-r', '${_FABRIC_API_SECRET_BUCKET_PATH}/', 'app']
+  args: ['cp', '${_FABRIC_API_SECRET_BUCKET_PATH}/', 'app']
   id: copy_fabric_files
 #Copy the build cache locally, if it exists.
 - name: 'gcr.io/cloud-builders/gsutil'
