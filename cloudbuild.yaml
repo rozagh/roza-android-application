@@ -1,10 +1,10 @@
 steps:
 #Copy
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '-r', '${_ANDROID_SIGNING_BUCKET_PATH}','/workspace/']
+  args: ['cp', '-r', '${_ANDROID_SIGNING_BUCKET_PATH}','.']
   id: copy_signing_files
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '-r', '${_FABRIC_API_SECRET_BUCKET_PATH}', '/workspace/app']
+  args: ['cp', '-r', '${_FABRIC_API_SECRET_BUCKET_PATH}', 'app']
   id: copy_fabric_files
 #Copy the build cache locally, if it exists.
 - name: 'gcr.io/cloud-builders/gsutil'
@@ -13,11 +13,20 @@ steps:
   volumes:
     - name: 'build_cache'
       path: '/build_cache'
+#list all files in root dir
+- name: 'gcr.io/$PROJECT_ID/android-builder'
+  args: ['gradle-build', '-q', ':app:list']
+  id: gradle-list
+  waitFor:
+    - copy_signing_files
+    - copy_build_cache_local
+    - copy_fabric_files
 #Android build and distribute with gradle
 - name: 'gcr.io/$PROJECT_ID/android-builder'
   args: ['gradle-build','${_ANDROID_SDK_LICENSE}','-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}','assemble${_BUILD_TYPE_CAPITALIZED}','crashlyticsUploadDistribution${_BUILD_TYPE_CAPITALIZED}', '--stacktrace']
   id: gradle_build
   waitFor:
+    - gradle-list
     - copy_signing_files
     - copy_build_cache_local
     - copy_fabric_files
