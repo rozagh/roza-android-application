@@ -19,7 +19,6 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(betaKeystorePropertiesFile));
 
 task list {
-
     // Create a file collection using a closure
     def collection = files { rootProject.getRootDir().listFiles() }
 
