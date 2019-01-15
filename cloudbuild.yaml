@@ -1,7 +1,7 @@
 steps:
 #Copy
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '${_SIGNING_BUCKET_PATH}','.']
+  args: ['cp', '${_ANDROID_SIGNING_BUCKET_PATH}','.']
   id: copy_signing_files
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', '${_FABRIC_API_SECRET_BUCKET_PATH}', 'app']
