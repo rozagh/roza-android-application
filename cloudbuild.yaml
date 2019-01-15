@@ -15,7 +15,7 @@ steps:
       path: '/build_cache'
 #list all files in root dir
 - name: 'gcr.io/$PROJECT_ID/android-builder'
-  args: ['gradle-build', '-q', ':app:list']
+  args: ['gradle', '-q', ':app:list']
   id: gradle-list
   waitFor:
     - copy_signing_files
