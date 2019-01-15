@@ -15,7 +15,7 @@ steps:
       path: '/build_cache'
 #list all files in root dir
 - name: 'gcr.io/cloud-builders/git'
-  args: ['git', 'ls-files']
+  args: ['ls-files']
   id: git-list-files
   waitFor:
     - copy_signing_files
