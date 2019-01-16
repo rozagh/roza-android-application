@@ -33,8 +33,8 @@ steps:
   volumes:
     - name: 'build_cache'
       path: '/build_cache'
-- name: 'gcr.io/cloud-builders/gradle'
-  args: ['assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}', '--stacktrace']
+- name: 'gcr.io/$PROJECT_ID/android-builder'
+  args: ['./gradlew', 'assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}', '--stacktrace']
   id: gradle_build_local
   waitFor:
     - git-list-files
