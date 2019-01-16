@@ -37,7 +37,6 @@ steps:
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['-q','cp', '/build_cache/dot_gradle.zip', '${_ANDROID_BUILD_CACHE}']
   waitFor:
-    - gradle_build_local
     - gradle_build
   volumes:
     - name: 'build_cache'
