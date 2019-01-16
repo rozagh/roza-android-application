@@ -18,14 +18,6 @@ def betaKeystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(betaKeystorePropertiesFile));
 
-task list {
-    // Create a file collection using a closure
-    def collection = files { rootProject.getRootDir().listFiles() }
-
-    println "Contents of root dir"
-    collection.collect { relativePath(it) }.sort().each { println it }
-}
-
 android {
     compileSdkVersion 28
     defaultConfig {
