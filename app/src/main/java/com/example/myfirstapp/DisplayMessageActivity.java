@@ -19,7 +19,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.textView);
         textView.setText(message);
-        if(message.equals("crash")) {
+        if(message.equals("crash2")) {
             throw new RuntimeException("This is a crash");
         }
 
