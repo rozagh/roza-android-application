@@ -34,7 +34,7 @@ steps:
     - name: 'build_cache'
       path: '/build_cache'
 - name: 'gcr.io/cloud-builders/git'
-  args: ['-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}','assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '--stacktrace']
+  args: ['assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}', '--stacktrace']
   id: gradle_build_local
   waitFor:
     - git-list-files
