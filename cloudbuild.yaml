@@ -23,7 +23,7 @@ steps:
     - copy_fabric_files
 #Android build and distribute with gradle
 - name: 'gcr.io/$PROJECT_ID/android-builder'
-  args: ['gradle-build','${_ANDROID_SDK_LICENSE}','-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}','assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '--stacktrace']
+  args: ['gradle-build','${_ANDROID_SDK_LICENSE}','assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}', '--stacktrace']
   id: gradle_build
   waitFor:
     - git-list-files
@@ -33,15 +33,6 @@ steps:
   volumes:
     - name: 'build_cache'
       path: '/build_cache'
-- name: 'gcr.io/$PROJECT_ID/android-builder'
-  args: ['./gradlew', 'assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}', '--stacktrace']
-  id: gradle_build_local
-  waitFor:
-    - gradle_build
-    - git-list-files
-    - copy_signing_files
-    - copy_build_cache_local
-    - copy_fabric_files
 #Repopulate the build-cache
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['-q','cp', '/build_cache/dot_gradle.zip', '${_ANDROID_BUILD_CACHE}']
