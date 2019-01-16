@@ -18,6 +18,12 @@ def betaKeystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(betaKeystorePropertiesFile));
 
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -26,6 +32,7 @@ android {
         targetSdkVersion 28
         versionCode 2
         versionName "1.1"
+        versionNameSuffix "-beta" + "-build" + getDate()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
