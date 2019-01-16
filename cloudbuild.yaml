@@ -23,7 +23,7 @@ steps:
     - copy_fabric_files
 #Android build and distribute with gradle
 - name: 'gcr.io/$PROJECT_ID/android-builder'
-  args: ['gradle-build','${_ANDROID_SDK_LICENSE}','-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}','assemble${_BUILD_TYPE_CAPITALIZED}','crashlyticsUploadDistribution${_BUILD_TYPE_CAPITALIZED}', '--stacktrace']
+  args: ['gradle-build','${_ANDROID_SDK_LICENSE}','-PbetaDistributionGroupAliases=${_EMAIL_DISTRIBUTION_GROUP}','assemble${_BUILD_TYPE}','crashlyticsUploadDistribution${_BUILD_TYPE}', '--stacktrace']
   id: gradle_build
   waitFor:
     - git-list-files
