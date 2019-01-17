@@ -14,9 +14,9 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-//def betaKeystorePropertiesFile = rootProject.file("keystore.properties")
-//def keystoreProperties = new Properties()
-//keystoreProperties.load(new FileInputStream(betaKeystorePropertiesFile));
+def betaKeystorePropertiesFile = rootProject.file("signing/keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(betaKeystorePropertiesFile));
 
 def getDate() {
     def date = new Date()
@@ -35,26 +35,26 @@ android {
         versionNameSuffix "-build" + getDate()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-//    signingConfigs {
-//        beta {
-//            keyAlias keystoreProperties['keyAlias']
-//            keyPassword keystoreProperties['keyPassword']
-//            storeFile file(keystoreProperties['storeFile'])
-//            storePassword keystoreProperties['storePassword']
-//        }
-//    }
+    signingConfigs {
+        beta {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-//        beta {
-//            initWith release
-//            signingConfig signingConfigs.beta
-//            ext.betaDistributionGroupAliases="testers"
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
+        beta {
+            initWith release
+            signingConfig signingConfigs.beta
+            ext.betaDistributionGroupAliases="testers"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 
