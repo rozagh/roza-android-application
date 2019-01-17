@@ -87,8 +87,8 @@ steps:
   args:
   - '-c'
   - |
-    gcloud kms decrypt --ciphertext-file=signing/keystore.properties.enc --plaintext-file=signing/keystore.properties --location=global --keyring=my-app --key=android-builder
-    gcloud kms decrypt --ciphertext-file=signing/google-service-account.json.enc --plaintext-file=signing/google-service-account.json --location=global --keyring=my-app --key=android-builder
+    gcloud kms decrypt --ciphertext-file=signing/keystore.properties.enc --plaintext-file=signing/keystore.properties --location=global --keyring=roza-app --key=android-builder
+    gcloud kms decrypt --ciphertext-file=signing/google-service-account.json.enc --plaintext-file=signing/google-service-account.json --location=global --keyring=roza-app --key=android-builder
 
 #
 # Build the project
