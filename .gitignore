@@ -15,4 +15,4 @@
 fabric.properties
 keystore.properties
 google-service-account.json
-
+testlab-service-account.json

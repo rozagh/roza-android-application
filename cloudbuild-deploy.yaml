@@ -89,6 +89,7 @@ steps:
   - |
     gcloud kms decrypt --ciphertext-file=signing/keystore.properties.enc --plaintext-file=signing/keystore.properties --location=global --keyring=roza-app --key=android-builder
     gcloud kms decrypt --ciphertext-file=signing/google-service-account.json.enc --plaintext-file=signing/google-service-account.json --location=global --keyring=roza-app --key=android-builder
+    gcloud kms decrypt --ciphertext-file=signing/testlab-service-account.json.enc --plaintext-file=signing/testlab-service-account.json --location=global --keyring=roza-app --key=android-builder
 
 #
 # Build the project
@@ -151,6 +152,18 @@ steps:
   waitFor: ['unit_tests']
 
 #
+# Deploy to Crashlytics Beta if this is any other branch.
+#
+- name: 'gcr.io/$PROJECT_ID/android:28'
+  id: run_testlab
+  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation"]
+  <<: *env
+  waitFor: ['unit_tests']
+  volumes:
+  - name: 'cache'
+    path: '/gradle_cache'
+
+#
 # Deployment
 #
 # Deploy to Google Play if this is the master branch.
@@ -159,7 +172,7 @@ steps:
   id: deploy_to_play
   args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
   <<: *env
-  waitFor: ['unit_tests']
+  waitFor: ['unit_tests', 'run_testlab']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
@@ -169,9 +182,9 @@ steps:
 #
 - name: 'gcr.io/$PROJECT_ID/android:28'
   id: deploy_to_beta
-  args: ["for_branch", "develop", "./gradlew", ":app:crashlyticsUploadDistributionDebug"]
+  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug"]
   <<: *env
-  waitFor: ['unit_tests']
+  waitFor: ['unit_tests', 'run_testlab']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'

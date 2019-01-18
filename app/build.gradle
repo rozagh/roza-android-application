@@ -1,17 +1,30 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+        jcenter()
+        google()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
+        classpath "com.google.gms:google-services:4.2.0"
+        classpath "com.github.triplet.gradle:play-publisher:2.0.0-SNAPSHOT"
+        classpath "gradle.plugin.firebase.test.lab:plugin:1.1.6"
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: "com.github.triplet.play"
+apply plugin: 'firebase.test.lab'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    jcenter()
+    google()
+    maven { url "https://plugins.gradle.org/m2/" }
 }
 
 def betaKeystorePropertiesFile = rootProject.file("signing/keystore.properties")
@@ -27,13 +40,15 @@ def getDate() {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.myfirstapp"
+        applicationId "com.roza.myfirstapp"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 2
         versionName "1.1"
-        versionNameSuffix "-build" + getDate()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    play {
+        serviceAccountCredentials = rootProject.file("signing/google-service-account.json")
     }
     signingConfigs {
         beta {
@@ -47,13 +62,25 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix "-build" + getDate()
         }
         beta {
             initWith release
             signingConfig signingConfigs.beta
             ext.betaDistributionGroupAliases="testers"
             minifyEnabled false
+            versionNameSuffix "beta-build" + getDate()
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    firebaseTestLab {
+        keyFile = rootProject.file("signing/testlab-service-account.json")
+        googleProjectId = "fastlaneci"
+        devices {
+            nexusEmulator {
+                deviceIds = ["sailfish"]
+                androidApiLevels = [28]
+            }
         }
     }
 }
