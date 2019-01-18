@@ -77,7 +77,7 @@ android {
         keyFile = rootProject.file("signing/testlab-service-account.json")
         googleProjectId = "fastlaneci"
         devices {
-            nexusEmulator {
+            pixleEmulator {
                 deviceIds = ["sailfish"]
                 androidApiLevels = [28]
             }
