@@ -118,6 +118,7 @@ steps:
 # Save the APKs
 #
 - name: 'gcr.io/cloud-builders/gsutil'
+  id: save_apk
   args: ['-q', 'cp', '-r', 'app/build/outputs/apk', 'gs://${_ARTIFACT_BUCKET}/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['build']
 
@@ -156,9 +157,9 @@ steps:
 #
 - name: 'gcr.io/$PROJECT_ID/android:28'
   id: run_testlab
-  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation"]
+  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
   <<: *env
-  waitFor: ['unit_tests']
+  waitFor: ['unit_tests', 'save_apk']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
