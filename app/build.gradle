@@ -43,7 +43,7 @@ android {
         applicationId "com.roza.myfirstapp"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 2
+        versionCode 3
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -76,6 +76,7 @@ android {
     firebaseTestLab {
         keyFile = rootProject.file("signing/testlab-service-account.json")
         googleProjectId = "fastlaneci"
+        cloudBucketName = "roza_android_build_cache"
         devices {
             pixleEmulator {
                 deviceIds = ["sailfish"]
