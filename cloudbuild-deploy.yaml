@@ -152,31 +152,31 @@ steps:
   args: ['-q', 'cp', '-r', 'app/build/test-results/', 'gs://${_ARTIFACT_BUCKET}/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['unit_tests']
 
-# #
-# # Deploy to Crashlytics Beta if this is any other branch.
-# #
-# - name: 'gcr.io/$PROJECT_ID/android:28'
-#   id: run_testlab
-#   args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
-#   <<: *env
-#   waitFor: ['unit_tests', 'save_apk']
-#   volumes:
-#   - name: 'cache'
-#     path: '/gradle_cache'
+#
+# Run instrumentation test in Testlab
+#
+- name: 'gcr.io/$PROJECT_ID/android:28'
+  id: run_testlab
+  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
+  <<: *env
+  waitFor: ['unit_tests']
+  volumes:
+  - name: 'cache'
+    path: '/gradle_cache'
 
-# #
-# # Deployment
-# #
-# # Deploy to Google Play if this is the master branch.
-# #
-# - name: 'gcr.io/$PROJECT_ID/android:28'
-#   id: deploy_to_play
-#   args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
-#   <<: *env
-#   waitFor: ['unit_tests', 'run_testlab']
-#   volumes:
-#   - name: 'cache'
-#     path: '/gradle_cache'
+#
+# Deployment
+#
+# Deploy to Google Play if this is the master branch.
+#
+- name: 'gcr.io/$PROJECT_ID/android:28'
+  id: deploy_to_play
+  args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
+  <<: *env
+  waitFor: ['unit_tests', 'run_testlab']
+  volumes:
+  - name: 'cache'
+    path: '/gradle_cache'
 
 #
 # Deploy to Crashlytics Beta if this is any other branch.
