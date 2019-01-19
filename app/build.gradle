@@ -27,9 +27,9 @@ repositories {
     maven { url "https://plugins.gradle.org/m2/" }
 }
 
-def betaKeystorePropertiesFile = rootProject.file("signing/keystore.properties")
+def keystorePropertiesFile = rootProject.file("signing/keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(betaKeystorePropertiesFile));
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile));
 
 def getDate() {
     def date = new Date()
@@ -43,15 +43,16 @@ android {
         applicationId "com.roza.myfirstapp"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
+        versionCode 6
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     play {
         serviceAccountCredentials = rootProject.file("signing/google-service-account.json")
+        releaseStatus = "draft"
     }
     signingConfigs {
-        beta {
+        config {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
@@ -63,10 +64,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-build" + getDate()
+            signingConfig signingConfigs.config
         }
         beta {
             initWith release
-            signingConfig signingConfigs.beta
+            signingConfig signingConfigs.config
             ext.betaDistributionGroupAliases="testers"
             minifyEnabled false
             versionNameSuffix "beta-build" + getDate()
