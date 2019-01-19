@@ -74,6 +74,14 @@ steps:
     path: '/build_cache'
 
 #
+# Copy jks from bucket
+#
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['rsync', 'gs://${_SIGNING_BUCKET}/','.']
+  id: copy_signing_files
+  waitFor: ['-']
+
+#
 # Decrypt secret files
 #
 # Secret files, like keystores and service account files, are stored in the repository
@@ -110,6 +118,7 @@ steps:
   waitFor:
     - decrypt_secrets
     - extract_build_cache
+    - copy_signing_files
   volumes:
   - name: 'build_cache'
     path: '/build_cache'

@@ -46,10 +46,6 @@ steps:
     gcloud kms decrypt --ciphertext-file=signing/keystore.properties.enc --plaintext-file=signing/keystore.properties --location=global --keyring=roza-app --key=android-builder
     gcloud kms decrypt --ciphertext-file=signing/google-service-account.json.enc --plaintext-file=signing/google-service-account.json --location=global --keyring=roza-app --key=android-builder
 
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['rsync', 'gs://${_SIGNING_BUCKET_PATH}/','.']
-  id: copy_signing_files
-
 #
 # Build the project
 #
