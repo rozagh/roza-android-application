@@ -188,13 +188,21 @@ steps:
     path: '/gradle_cache'
 
 #
+# Copy fabric.properties from bucket
+#
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['rsync', 'gs://${_FABRIC_PROP_BUCKET}/','./app']
+  id: copy_fabric_files
+  waitFor: ['-']
+
+#
 # Deploy to Crashlytics Beta if this is any other branch.
 #
 - name: 'gcr.io/$PROJECT_ID/android:28'
   id: deploy_to_beta
   args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug"]
   <<: *env
-  waitFor: ['unit_tests']
+  waitFor: ['unit_tests', 'copy_fabric_files']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
