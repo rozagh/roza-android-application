@@ -79,6 +79,8 @@ android {
         keyFile = rootProject.file("signing/testlab-service-account.json")
         googleProjectId = "fastlaneci"
         cloudBucketName = "roza_android_build_cache"
+        cloudDirectoryName= "testlab-files"
+        
         devices {
             pixleEmulator {
                 deviceIds = ["sailfish"]
