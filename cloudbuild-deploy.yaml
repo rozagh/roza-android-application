@@ -200,7 +200,7 @@ steps:
 #
 - name: 'gcr.io/$PROJECT_ID/android:28'
   id: deploy_to_beta
-  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug"]
+  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug", "--stacktrace"]
   <<: *env
   waitFor: ['unit_tests', 'copy_fabric_files']
   volumes:

@@ -48,7 +48,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     play {
-//        serviceAccountCredentials = rootProject.file("signing/google-service-account.json")
+        serviceAccountCredentials = rootProject.file("signing/google-service-account.json")
         releaseStatus = "draft"
     }
     signingConfigs {
