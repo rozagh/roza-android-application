@@ -182,7 +182,7 @@ steps:
   id: deploy_to_play
   args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
   <<: *env
-  waitFor: ['unit_tests']
+  waitFor: ['unit_tests', 'run_testlab']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
