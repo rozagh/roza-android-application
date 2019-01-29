@@ -145,6 +145,14 @@ steps:
   - name: 'build_cache'
     path: '/build_cache'
 
+
+
+# run tests with fastlane
+- name: 'gcr.io/$PROJECT_ID/fastlane'
+  args: ["test"]
+  id: fastlane_help
+  waitFor: ['build']
+
 #
 # Store the unit test reports
 #
@@ -206,6 +214,14 @@ steps:
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
+
+
+# run tests with fastlane beta
+- name: 'gcr.io/$PROJECT_ID/fastlane'
+  args: ["beta"]
+  id: fastlane_help
+  waitFor: ['unit_tests']
+
 
 #
 # Cleanup

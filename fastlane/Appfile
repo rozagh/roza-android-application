@@ -1,0 +1,2 @@
+package_name "com.roza.myfirstapp" # e.g. com.krausefx.app
+json_key_file "signing/google-service-account.json"
