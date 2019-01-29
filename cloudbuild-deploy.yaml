@@ -150,7 +150,7 @@ steps:
 # run tests with fastlane
 - name: 'gcr.io/$PROJECT_ID/fastlane'
   args: ["test"]
-  id: fastlane_help
+  id: fastlane_test
   waitFor: ['build']
 
 #
@@ -219,7 +219,7 @@ steps:
 # run tests with fastlane beta
 - name: 'gcr.io/$PROJECT_ID/fastlane'
   args: ["beta"]
-  id: fastlane_help
+  id: fastlane_beta
   waitFor: ['unit_tests']
 
 
