@@ -136,22 +136,26 @@ steps:
 #
 # Run the unit tests using the same type of step as the build.
 #
+# - name: 'gcr.io/$PROJECT_ID/android:28'
+#   id: unit_tests
+#   args: ["./gradlew", "check"]
+#   <<: *env
+#   waitFor: ['build']
+#   volumes:
+#   - name: 'build_cache'
+#     path: '/build_cache'
+
+
+
+# run tests with fastlane
 - name: 'gcr.io/$PROJECT_ID/android:28'
+  args: ["fastlane", "test"]
   id: unit_tests
-  args: ["./gradlew", "check"]
-  <<: *env
   waitFor: ['build']
   volumes:
   - name: 'build_cache'
     path: '/build_cache'
 
-
-
-# run tests with fastlane
-- name: 'gcr.io/$PROJECT_ID/fastlane'
-  args: ["test"]
-  id: fastlane_test
-  waitFor: ['build']
 
 #
 # Store the unit test reports
@@ -169,17 +173,17 @@ steps:
   args: ['-q', 'cp', '-r', 'app/build/test-results/', 'gs://${_ARTIFACT_BUCKET}/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['unit_tests']
 
-#
-# Run instrumentation test in Testlab
-#
-- name: 'gcr.io/$PROJECT_ID/android:28'
-  id: run_testlab
-  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
-  <<: *env
-  waitFor: ['unit_tests']
-  volumes:
-  - name: 'cache'
-    path: '/gradle_cache'
+# #
+# # Run instrumentation test in Testlab
+# #
+# - name: 'gcr.io/$PROJECT_ID/android:28'
+#   id: run_testlab
+#   args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
+#   <<: *env
+#   waitFor: ['unit_tests']
+#   volumes:
+#   - name: 'cache'
+#     path: '/gradle_cache'
 
 #
 # Deployment
@@ -190,7 +194,7 @@ steps:
   id: deploy_to_play
   args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
   <<: *env
-  waitFor: ['unit_tests', 'run_testlab']
+  waitFor: ['unit_tests']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
@@ -217,8 +221,8 @@ steps:
 
 
 # run tests with fastlane beta
-- name: 'gcr.io/$PROJECT_ID/fastlane'
-  args: ["beta"]
+- name: 'gcr.io/$PROJECT_ID/android:28'
+  args: ["fastlane", "beta"]
   id: fastlane_beta
   waitFor: ['unit_tests']
 
