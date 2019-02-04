@@ -233,7 +233,9 @@ steps:
   args: ["fastlane", "beta"]
   id: deploy_to_beta
   waitFor: ['fastlane_ftl', 'copy_fabric_files']
-
+  volumes:
+  - name: 'cache'
+    path: '/gradle_cache'
 
 #
 # Cleanup
