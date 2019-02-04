@@ -27,7 +27,7 @@ steps:
   args:
   - '-c'
   - |
-    cat /config/buildnum | awk '{print $1"+1"}' | bc | tee /config/buildnum | awk '{print "BUILD_NUM="$1 }' | tee .buildnum .buildenv
+    cat /config/buildnum | awk '{print $1"+1"}' | bc | tee /config/buildnum | awk '{print "BUILD_NUM="$1 }' | tee .buildnum
   waitFor: ['copy_config']
   volumes:
   - name: 'config'
@@ -136,26 +136,22 @@ steps:
 #
 # Run the unit tests using the same type of step as the build.
 #
-# - name: 'gcr.io/$PROJECT_ID/android:28'
-#   id: unit_tests
-#   args: ["./gradlew", "check"]
-#   <<: *env
-#   waitFor: ['build']
-#   volumes:
-#   - name: 'build_cache'
-#     path: '/build_cache'
-
-
-
-# run tests with fastlane
 - name: 'gcr.io/$PROJECT_ID/android:28'
-  args: ["fastlane", "test"]
   id: unit_tests
+  args: ["./gradlew", "check"]
+  <<: *env
   waitFor: ['build']
   volumes:
   - name: 'build_cache'
     path: '/build_cache'
 
+
+
+# run tests with fastlane
+- name: 'gcr.io/$PROJECT_ID/fastlane'
+  args: ["test"]
+  id: fastlane_test
+  waitFor: ['build']
 
 #
 # Store the unit test reports
@@ -173,17 +169,17 @@ steps:
   args: ['-q', 'cp', '-r', 'app/build/test-results/', 'gs://${_ARTIFACT_BUCKET}/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['unit_tests']
 
-# #
-# # Run instrumentation test in Testlab
-# #
-# - name: 'gcr.io/$PROJECT_ID/android:28'
-#   id: run_testlab
-#   args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
-#   <<: *env
-#   waitFor: ['unit_tests']
-#   volumes:
-#   - name: 'cache'
-#     path: '/gradle_cache'
+#
+# Run instrumentation test in Testlab
+#
+- name: 'gcr.io/$PROJECT_ID/android:28'
+  id: run_testlab
+  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
+  <<: *env
+  waitFor: ['unit_tests']
+  volumes:
+  - name: 'cache'
+    path: '/gradle_cache'
 
 #
 # Deployment
@@ -194,18 +190,10 @@ steps:
   id: deploy_to_play
   args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
   <<: *env
-  waitFor: ['unit_tests']
+  waitFor: ['unit_tests', 'run_testlab']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
-
-
-# run tests with fastlane beta
-- name: 'gcr.io/$PROJECT_ID/android:28'
-  args: ["fastlane", "ftl"]
-  id: fastlane_ftl
-  waitFor: ['unit_tests']
-
 
 #
 # Copy fabric.properties from bucket
@@ -215,27 +203,25 @@ steps:
   id: copy_fabric_files
   waitFor: ['-']
 
-##
-## Deploy to Crashlytics Beta if this is any other branch.
-##
-#- name: 'gcr.io/$PROJECT_ID/android:28'
-#  id: deploy_to_beta
-#  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug", "--stacktrace"]
-#  <<: *env
-#  waitFor: ['unit_tests', 'copy_fabric_files']
-#  volumes:
-#  - name: 'cache'
-#    path: '/gradle_cache'
-
-
-# run tests with fastlane beta
+#
+# Deploy to Crashlytics Beta if this is any other branch.
+#
 - name: 'gcr.io/$PROJECT_ID/android:28'
-  args: ["fastlane", "beta"]
   id: deploy_to_beta
-  waitFor: ['fastlane_ftl', 'copy_fabric_files']
+  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug", "--stacktrace"]
+  <<: *env
+  waitFor: ['unit_tests', 'copy_fabric_files']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
+
+
+# run tests with fastlane beta
+- name: 'gcr.io/$PROJECT_ID/fastlane'
+  args: ["beta"]
+  id: fastlane_beta
+  waitFor: ['unit_tests']
+
 
 #
 # Cleanup
