@@ -199,6 +199,14 @@ steps:
   - name: 'cache'
     path: '/gradle_cache'
 
+
+# run tests with fastlane beta
+- name: 'gcr.io/$PROJECT_ID/android:28'
+  args: ["fastlane", "ftl"]
+  id: fastlane_beta
+  waitFor: ['unit_tests']
+
+
 #
 # Copy fabric.properties from bucket
 #
@@ -207,22 +215,22 @@ steps:
   id: copy_fabric_files
   waitFor: ['-']
 
-#
-# Deploy to Crashlytics Beta if this is any other branch.
-#
-- name: 'gcr.io/$PROJECT_ID/android:28'
-  id: deploy_to_beta
-  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug", "--stacktrace"]
-  <<: *env
-  waitFor: ['unit_tests', 'copy_fabric_files']
-  volumes:
-  - name: 'cache'
-    path: '/gradle_cache'
+##
+## Deploy to Crashlytics Beta if this is any other branch.
+##
+#- name: 'gcr.io/$PROJECT_ID/android:28'
+#  id: deploy_to_beta
+#  args: ["for_branch", "master", "./gradlew", ":app:crashlyticsUploadDistributionDebug", "--stacktrace"]
+#  <<: *env
+#  waitFor: ['unit_tests', 'copy_fabric_files']
+#  volumes:
+#  - name: 'cache'
+#    path: '/gradle_cache'
 
 
 # run tests with fastlane beta
 - name: 'gcr.io/$PROJECT_ID/android:28'
-  args: ["fastlane", "beta"]
+  args: ['unit_tests', 'copy_fabric_files']
   id: fastlane_beta
   waitFor: ['unit_tests']
 

@@ -40,6 +40,18 @@ platform :android do
     gradle(task: "test")
   end
 
+  desc "run firebase testlab"
+  lane:ftl do
+    run_tests_firebase_testlab(
+    project_id: "fastlaneci",
+    gcloud_service_key_file: "signing/testlab-service-account.json",
+    devices: [
+      {
+        model: "Nexus6P",
+        version: "27"
+      }
+    ]);
+  end
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
