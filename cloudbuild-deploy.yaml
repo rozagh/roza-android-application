@@ -232,7 +232,7 @@ steps:
 - name: 'gcr.io/$PROJECT_ID/android:28'
   args: ["fastlane", "beta"]
   id: fastlane_beta
-  waitFor: ['fastlane_ftl']
+  waitFor: ['fastlane_ftl', 'copy_fabric_files']
 
 
 #
