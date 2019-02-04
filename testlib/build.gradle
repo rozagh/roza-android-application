@@ -1,14 +1,8 @@
-buildscript {
-    repositories {
-        google()
-    }
-}
-apply plugin: 'com.android.application'
+apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-android {
-    compileSdkVersion 28
-}
+sourceCompatibility = "7"
+targetCompatibility = "7"
