@@ -57,7 +57,7 @@ android {
 //            keyPassword keystoreProperties['keyPassword']
 //            storeFile file(keystoreProperties['storeFile'])
 //            storePassword keystoreProperties['storePassword']
-            storeFile rootProject.file("app/upload-beta.jks.jks")
+            storeFile rootProject.file("app/upload-beta.jks")
             storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
             keyAlias System.getenv("APPCENTER_KEY_ALIAS")
             keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
