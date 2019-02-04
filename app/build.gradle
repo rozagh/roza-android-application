@@ -57,10 +57,10 @@ android {
 //            keyPassword keystoreProperties['keyPassword']
 //            storeFile file(keystoreProperties['storeFile'])
 //            storePassword keystoreProperties['storePassword']
-            storeFile rootProject.file("app/upload-beta.jks")
-            storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
-            keyAlias System.getenv("APPCENTER_KEY_ALIAS")
-            keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
+//            storeFile rootProject.file("app/upload-beta.jks")
+//            storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
+//            keyAlias System.getenv("APPCENTER_KEY_ALIAS")
+//            keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
         }
     }
     buildTypes {
@@ -68,11 +68,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-build" + getDate()
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
         beta {
             initWith release
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
             ext.betaDistributionGroupAliases="testers"
             minifyEnabled false
             versionNameSuffix "beta-build" + getDate()
