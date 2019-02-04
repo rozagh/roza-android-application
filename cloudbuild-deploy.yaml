@@ -203,7 +203,7 @@ steps:
 # run tests with fastlane beta
 - name: 'gcr.io/$PROJECT_ID/android:28'
   args: ["fastlane", "ftl"]
-  id: fastlane_beta
+  id: fastlane_ftl
   waitFor: ['unit_tests']
 
 
