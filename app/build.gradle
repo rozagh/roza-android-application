@@ -27,9 +27,9 @@ repositories {
     maven { url "https://plugins.gradle.org/m2/" }
 }
 
-def keystorePropertiesFile = rootProject.file("signing/keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile));
+//def keystorePropertiesFile = rootProject.file("signing/keystore.properties")
+//def keystoreProperties = new Properties()
+//keystoreProperties.load(new FileInputStream(keystorePropertiesFile));
 
 def getDate() {
     def date = new Date()
@@ -51,14 +51,14 @@ android {
         serviceAccountCredentials = rootProject.file("signing/google-service-account.json")
         releaseStatus = "draft"
     }
-    signingConfigs {
-        config {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
+//    signingConfigs {
+//        config {
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['keyPassword']
+//            storeFile file(keystoreProperties['storeFile'])
+//            storePassword keystoreProperties['storePassword']
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false
