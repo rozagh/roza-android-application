@@ -147,11 +147,11 @@ steps:
 
 
 
-# run tests with fastlane
-- name: 'gcr.io/$PROJECT_ID/fastlane'
-  args: ["test"]
-  id: fastlane_test
-  waitFor: ['build']
+# # run tests with fastlane
+# - name: 'gcr.io/$PROJECT_ID/fastlane'
+#   args: ["test"]
+#   id: fastlane_test
+#   waitFor: ['build']
 
 #
 # Store the unit test reports
@@ -216,11 +216,11 @@ steps:
     path: '/gradle_cache'
 
 
-# run tests with fastlane beta
-- name: 'gcr.io/$PROJECT_ID/fastlane'
-  args: ["beta"]
-  id: fastlane_beta
-  waitFor: ['unit_tests']
+# # run tests with fastlane beta
+# - name: 'gcr.io/$PROJECT_ID/fastlane'
+#   args: ["beta"]
+#   id: fastlane_beta
+#   waitFor: ['unit_tests']
 
 
 #
