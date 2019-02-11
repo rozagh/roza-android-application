@@ -169,17 +169,17 @@ steps:
   args: ['-q', 'cp', '-r', 'app/build/test-results/', 'gs://${_ARTIFACT_BUCKET}/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['unit_tests']
 
-#
-# Run instrumentation test in Testlab
-#
-- name: 'gcr.io/$PROJECT_ID/android:28'
-  id: run_testlab
-  args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
-  <<: *env
-  waitFor: ['unit_tests']
-  volumes:
-  - name: 'cache'
-    path: '/gradle_cache'
+# #
+# # Run instrumentation test in Testlab
+# #
+# - name: 'gcr.io/$PROJECT_ID/android:28'
+#   id: run_testlab
+#   args: ["./gradlew", ":app:firebaseTestLabExecuteDebugInstrumentation", "--stacktrace"]
+#   <<: *env
+#   waitFor: ['unit_tests']
+#   volumes:
+#   - name: 'cache'
+#     path: '/gradle_cache'
 
 #
 # Deployment
@@ -190,7 +190,7 @@ steps:
   id: deploy_to_play
   args: ["for_branch", "master", "./gradlew", ":app:publishReleaseApk"]
   <<: *env
-  waitFor: ['unit_tests', 'run_testlab']
+  waitFor: ['unit_tests']
   volumes:
   - name: 'cache'
     path: '/gradle_cache'
