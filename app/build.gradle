@@ -68,11 +68,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix "-build" + getDate()
-//            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
         }
         beta {
             initWith release
-//            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
             ext.betaDistributionGroupAliases="testers"
             minifyEnabled false
             versionNameSuffix "beta-build" + getDate()
@@ -83,7 +83,6 @@ android {
         keyFile = rootProject.file("signing/testlab-service-account.json")
         googleProjectId = "fastlaneci"
         cloudBucketName = "roza_android_build_cache"
-        cloudDirectoryName= "testlab-files"
 
         devices {
             pixleEmulator {
